@@ -7,7 +7,7 @@
 
 # Gerador de boletos com PIX QRCode
 
-![](https://pandao.github.io/editor.md/images/logos/editormd-logo-180x180.png)
+![](https://raw.githubusercontent.com/resendegu/gerador-boleto-pix-guias/main/src/assets/interface.gif)
 
 ![](https://img.shields.io/github/stars/resendegu/gerador-boleto-pix-guias.svg) ![](https://img.shields.io/github/forks/resendegu/gerador-boleto-pix-guias.svg) ![](https://img.shields.io/github/tag/resendegu/gerador-boleto-pix-guias.svg) ![](https://img.shields.io/github/release/resendegu/gerador-boleto-pix-guias.svg) ![](https://img.shields.io/github/issues/resendegu/gerador-boleto-pix-guias.svg)
 
