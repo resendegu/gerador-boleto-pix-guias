@@ -1,7 +1,7 @@
 {
   "hosting": {
     "site": "geraboleto",
-    "public": "build",
+    "public": "dist",
     "ignore": [
       "firebase.json",
       "**/.*",
