@@ -1,72 +1,19 @@
 import { Fragment, useEffect, useState } from 'react';
 import ErrorDialog from './ErrorDialog';
 import FullScreenDialog from './FullscreenDialog';
-import { Checkbox, Container, FormControl, FormControlLabel, FormHelperText, Grid, InputLabel, LinearProgress, Select, TextField } from '@mui/material';
+import { Checkbox, Container, FormControl, FormControlLabel, FormHelperText, Grid, InputLabel, Select, TextField } from '@mui/material';
 import $ from 'jquery';
 import CrudTable from './DataGrid';
-
-// const useStyles = makeStyles((theme) => ({
-//     root: {
-//       flexGrow: 1,
-//     },
-//     fields: {
-//       padding: theme.spacing(2),
-//       textAlign: 'center',
-//       color: theme.palette.text.secondary,
-//     },
-//     button: {
-//         alignSelf: 'center',
-        
-//       },
-//       selectEmpty: {
-//         marginTop: theme.spacing(2),
-//       },
-//     formControl: {
-//         padding: theme.spacing(2),
-//     }
-//   }));
+import { toast } from 'sonner';
 
 const ContractConfigure = ({ isOpen, setOpenDialog }) => {
 
     const [ saveDisabled, setSaveDisabled ] = useState(true);
-
+    const [ shrink, setShrink ] = useState(true);
+    const [ openDialogError, setOpenDialogError ] = useState(false);
     useEffect(() => {
         setSaveDisabled(false)
-        //handleGetData()
     }, [isOpen])
-
-    const handleGetData = () => {
-        // handleMountContractScreen()//courseInfo.val())   
-    }
-
-    const [ shrink, setShrink ] = useState(true);
-
-    const [ plans, setPlans ] = useState([{value: '', label: '', key: ''}])
-    const [ plan, setPlan ] = useState([{id: ''}])
-
-    const [ openDialogError, setOpenDialogError ] = useState(false);
-
-    // const handleMountContractScreen = () => {
-
-    //     let plansInfo = courseInfo.planos;
-    //     let plansArray = [];
-    //     for (const key in plansInfo) {
-    //         if (Object.hasOwnProperty.call(plansInfo, key)) {
-    //             const plan = plansInfo[key];
-    //             plansArray.push({value: key, label: plan.nomePlano, key: key})
-    //         }
-    //     }
-    //     console.log(plansArray)
-       
-    // }
-
-    // const classes = useStyles();
-    //const [ data, setData ] = useState(null);
-
-    const [state, setState] = useState({
-        planId: '',
-        name: '',
-    });
 
     const columns = [
         { field: 'col1', headerName: 'Parcela', width: 110 }, 
@@ -83,14 +30,12 @@ const ContractConfigure = ({ isOpen, setOpenDialog }) => {
         let form = document.querySelector('#contractForm');
         let formData = new FormData(form);
         let fieldsData = $('#contractForm').serializeArray();
-        console.log(fieldsData)
 
         let internData = {};
         fieldsData.forEach(field => {
             let values = formData.getAll(field.name);
             internData[field.name] = values.length === 1 ?  values[0] : values;
         })
-        let internPlan
 
         internData.vencimentoEscolhido = internData.diasDeVencimento
             
@@ -127,23 +72,18 @@ const ContractConfigure = ({ isOpen, setOpenDialog }) => {
                     saldoDesconto = saldoDesconto - descontoParcela
                     
                     row = {id: parcela, col1: parcela + 1, col2: `R$${valorParcela}`, col3: ` ${acrescimoParcela !== 0 || acrescimoParcela !== '' ? '+ R$' + acrescimoParcela : ''}`, col4: ` ${descontoParcela !== 0 || descontoParcela !== '' ? '- R$' + descontoParcela : ''}`, col5: `R$${(Number(valorParcela) + (acrescimoParcela - descontoParcela)).toFixed(2)}`} 
-                    console.log(row)
                     somaParcelas += (Number(valorParcela) + (acrescimoParcela - descontoParcela))
                 } else {
                     saldo = parcela === 0 ? internData.valorFinal : saldo
                     row = {id: parcela, col1: `Parcela ${parcela + 1}`, col2: `R$${parseFloat(internData.valorFinal / internData.numeroParcelas).toFixed(2)}`, col3: '0', col4: '0', col5: `R$${parseFloat(internData.valorFinal / internData.numeroParcelas).toFixed(2)}`}
-                    // saldo = saldo - parseFloat(internData.valorFinal / internData.numeroMaximoParcelasPlano).toFixed(2)
                     somaParcelas += Number(parseFloat(internData.valorFinal / internData.numeroParcelas))
                 }
                 saldo = (internData.valorCurso) - somaParcelas
-                console.log(saldo)
                 internRows.push(row)
-                console.log(internRows)
-                // addParcela(`Saldo: R$${saldo}`)
+                
                 contadorParcelas--
             }
             setRows(internRows)
-            // addParcela(`Total: R$${somaParcelas.toFixed(2)}`)
 
         } catch (error) {
             console.log(error)
@@ -157,23 +97,25 @@ const ContractConfigure = ({ isOpen, setOpenDialog }) => {
                 }
             }
 
-            if (save) {
+            if (save == true) {
                 let boletos = JSON.parse(sessionStorage.getItem('contratoConfigurado'))
                 
-                //sessionStorage.setItem('planoOriginal', JSON.stringify(internPlan));
-                //let contractCode = await contractRef.push().key;
-                //sessionStorage.setItem('codContrato', contractCode);
                 if ((internData.vencimentoEscolhido && internData.numeroParcelas && internData['ano-mes']) !== '') {
-                    setOpenDialog(false);
+                    
                     if (boletos) {
                         boletos.push(internData)
                     } else {
                         boletos = [internData]
                     }
+
+                    
                     sessionStorage.setItem('contratoConfigurado', JSON.stringify(boletos));
-                    window.dispatchEvent(new Event('storage'))
+                    window.dispatchEvent(new Event('storage'));
+                
+                    setOpenDialog(false);
+                    toast.success('Boleto configurado com sucesso.')
                 } else {
-                    alert('Erro: Preencha todos os campos necessários do boleto.');
+                    toast.error('Preencha todos os campos obrigatórios.')
                 }
                 
             }
@@ -186,12 +128,6 @@ const ContractConfigure = ({ isOpen, setOpenDialog }) => {
 
       const handleSubmit = (e) => {
         e.preventDefault()
-        console.log(e)
-        let formData = new FormData(document.getElementById('contractForm'))
-  
-        let data = Object.fromEntries(formData.entries());
-        console.log(data)
-        //sessionStorage.setItem(activeStep, JSON.stringify(data))
       }
 
       const daysOptions = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31]
@@ -318,14 +254,14 @@ const ContractConfigure = ({ isOpen, setOpenDialog }) => {
                                 <Select
                                     required
                                     native
-                                    value={state.value}
+                                    value={day}
                                     onChange={handleChangeDay}
                                     inputProps={{
                                         name: 'diasDeVencimento',
                                         id: 'diasDeVencimento',
                                     }}
                                 >
-                                    {daysOptions.map(dayOpt => <option value={dayOpt}>{dayOpt}</option>)}
+                                    {daysOptions.map((dayOpt, i) => <option key={`day${i}`} value={dayOpt}>{dayOpt}</option>)}
                                     
                                 </Select>
                                 <FormHelperText>Escolha o dia de vencimento do boleto/carnê. </FormHelperText>

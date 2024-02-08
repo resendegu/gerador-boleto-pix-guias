@@ -1,7 +1,7 @@
 import { Merchant } from 'steplix-emv-qrcps';
 import QRCode from 'qrcode'
 
-const generatePixQRCode = (chavePix, valor, nomePix, descricao, tipoChavePix, cidadePix) => {
+const generatePixQRCode = (chavePix, valor, nomePix, identificador, tipoChavePix, cidadePix) => {
     class BrCode {
         constructor(key, amount, name, reference, key_type, city) {
           this.key = key;
@@ -35,7 +35,6 @@ const generatePixQRCode = (chavePix, valor, nomePix, descricao, tipoChavePix, ci
         formated_key() {
           var rkey = this.key;
           var ktype = this.key_type;
-      
           if (ktype == 'telefone' || ktype == 'cnpj' || ktype == "cpf") {
             rkey = rkey.replace(/\D/g,'');
           }
@@ -91,13 +90,10 @@ const generatePixQRCode = (chavePix, valor, nomePix, descricao, tipoChavePix, ci
     }
 
     async function criaCod() {
-        const lineCode = new BrCode(chavePix, valor, nomePix, descricao, tipoChavePix, cidadePix);
-        console.log(lineCode)
+        const lineCode = new BrCode(chavePix, valor, nomePix, identificador, tipoChavePix, cidadePix);
         const code = lineCode.generate_qrcp();
-        console.log(code)
         const QR_CODE_SIZE = 400;
         return QRCode.toDataURL(code, {width: QR_CODE_SIZE, height: QR_CODE_SIZE}).then(qrcode => {
-            console.log(qrcode)
             return qrcode;
         }).catch(err => {
             console.error(err)

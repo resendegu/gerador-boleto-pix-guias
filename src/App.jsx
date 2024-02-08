@@ -1,81 +1,52 @@
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-import GenerateBoletoImpresso from './generators/GenerateBoletoImpresso'
-import { useEffect, useState } from 'react'
-import ContractConfigure from './FormDadosBoleto'
-import { Button, FormControl, InputLabel, MenuItem, Select } from '@mui/material'
-import { PlusOne, Print } from '@mui/icons-material'
+import {} from 'react';
+import { styled } from '@mui/material/styles';
+import Box from '@mui/material/Box';
+import Paper from '@mui/material/Paper';
+import Grid from '@mui/material/Unstable_Grid2';
+import { Container } from '@mui/material';
+import InicioBoletos from './components/InicioBoletos';
+import Beneficiario from './components/Beneficiario';
+import Sacado from './components/Sacado';
 
-function App() {
-  const [count, setCount] = useState(0)
-  const [openBoletos, setOpenBoletos] = useState(false)
-  const [openBoletosInfo, setBoletosInfo] = useState(false)
-  const [boletos, setBoletos] = useState()
-  const [boletoEscolhido, setBoletoEscolhido] = useState('none');
-  
 
-  const handleChooseBoleto = (e) => {
-    let value = e.target.value
-    setBoletoEscolhido(value)
-  }
+const Item = styled(Paper)(({ theme }) => ({
+  backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+  ...theme.typography.body2,
+  padding: theme.spacing(1),
+  textAlign: 'center',
+  color: theme.palette.text.secondary,
+}));
 
-  const handleOpenBoleto = () => {
-    setOpenBoletos(true)
-  }
-  const handleStorage = () => {
-    let boletosGuardado = JSON.parse(sessionStorage.getItem('contratoConfigurado'))
-    setBoletos(boletosGuardado)
-    console.log(boletosGuardado)
-  }
-  useEffect(() => {
-    
-
-    handleStorage()
-    window.addEventListener('storage', handleStorage())
-    return () => window.removeEventListener('storage', handleStorage())
-  }, [openBoletos])
+const App = () => {
 
   return (
-    <>
-      <Button startIcon={<PlusOne />} onClick={() => setBoletosInfo(true)}>Criar um boleto</Button>
-      <FormControl fullWidth>
-        <InputLabel id="demo-simple-select-label">Boletos</InputLabel>
-        <Select
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
-          value={boletoEscolhido}
-          label="Boletos"
-          onChange={(e) => handleChooseBoleto(e)}
-        >
-          <MenuItem value="none" disabled >
-            <em>Escolha um boleto</em>
-          </MenuItem>
-          {boletos && boletos.map((boleto, i) => <MenuItem key={i} value={i}>{boleto.nomeBoleto}</MenuItem>)}
-         
-        </Select>
-      </FormControl>
-      <Button startIcon={<Print />} disabled={boletoEscolhido == "none" ? true : false} onClick={handleOpenBoleto}>Gerar boletos</Button>
-      <ContractConfigure isOpen={openBoletosInfo} setOpenDialog={setBoletosInfo} />
-      {openBoletos &&  
-        <GenerateBoletoImpresso 
-          open={openBoletos} 
-          onClose={setOpenBoletos} 
-          acrescimo={boletos[boletoEscolhido]['acrescimoPlano']}
-          ano={boletos[boletoEscolhido]['ano-mes'].split('-')[0]}
-          mes={boletos[boletoEscolhido]['ano-mes'].split('-')[1]}
-          desconto={boletos[boletoEscolhido]['descontoPlano']}
-          informacoesBoleto={boletos[boletoEscolhido]['descricaoPlano']}
-          distribuirAcrescimosEDescontos={boletos[boletoEscolhido]['distribuirAcrescimosEDescontos']}
-          numDocInicio={1}
-          numeroParcelas={boletos[boletoEscolhido]['numeroParcelas']}
-          pularMesParaVencimento={true}
-          quandoAplicar={0}
-          valor={boletos[boletoEscolhido]['valorFinal']}
-          vencimentoEscolhido={boletos[boletoEscolhido]['vencimentoEscolhido']}
-        />
-      }
-    </>
+    <Container sx={{marginTop: '10px'}}>
+      <div>
+        <h1>Gerador de Boletos</h1>
+        <p>Preencha os campos abaixo, crie um boleto e depois clique em Gerar Boletos. Os boletos são armazenados localmente em sessionStorage do seu navegador. Se fechar esta aba seus boletos serão perdidos.</p>
+      </div>
+      
+      <Box sx={{ flexGrow: 1 }}>
+        <Grid container spacing={3} justifyContent={'center'}>
+          <Grid item xs={12} sm={6} md={4} lg={3}>
+            <Item sx={{ height: '100%' }}>
+              <Sacado />
+            </Item>
+          </Grid>
+          <Grid item xs={12} sm={6} md={4} lg={3}>
+            <Item sx={{ height: '100%' }}>
+              <Beneficiario />
+            </Item>
+          </Grid>
+          <Grid item xs={12} sm={6} md={4} lg={3}>
+            <Item sx={{ height: '100%' }}>
+              <InicioBoletos />
+            </Item>
+          </Grid>
+        </Grid>
+      </Box>
+    </Container>
+    
   )
 }
 
