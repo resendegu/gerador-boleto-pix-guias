@@ -9,24 +9,22 @@
 
 ![](https://raw.githubusercontent.com/resendegu/gerador-boleto-pix-guias/main/src/assets/interface.gif)
 
-![](https://img.shields.io/github/stars/resendegu/gerador-boleto-pix-guias.svg) ![](https://img.shields.io/github/forks/resendegu/gerador-boleto-pix-guias.svg) ![](https://img.shields.io/github/tag/resendegu/gerador-boleto-pix-guias.svg) ![](https://img.shields.io/github/release/resendegu/gerador-boleto-pix-guias.svg) ![](https://img.shields.io/github/issues/resendegu/gerador-boleto-pix-guias.svg)
 
 
-
-#Sobre
+# Sobre
 Esse é um gerador de guias de pagamento simples (não possuem integração bancária). Uma ótima solução para comerciantes que querem apenas um canhoto para que o cliente e a empresa possam controlar pagamento de parcelas, mensalidades, etc. A guia também gera um QR Code PIX para pagamento.
 
-#Como usar
+# Como usar
 
 Esta interface usa ReactJS e foi feito com o ViteJS.dev.
 
-####Iniciando servidor de desenvolvimento
+#### Iniciando servidor de desenvolvimento
 - Clone este repositório e execute os seguintes comandos
 `$ npm install` para instalar as depedências do projeto
 `$ npm run dev` para iniciar o servidor dev
 - Depois basta acessar o link que será dado no terminal para acessar a interface
 
-###Imagens
+### Imagens
 
 Tela de Início:
 
