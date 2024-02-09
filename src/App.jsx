@@ -23,7 +23,8 @@ const App = () => {
     <Container sx={{marginTop: '10px'}}>
       <div>
         <h1>Gerador de Boletos</h1>
-        <p>Preencha os campos abaixo, crie um boleto e depois clique em Gerar Boletos. Os boletos são armazenados localmente em sessionStorage do seu navegador. Se fechar esta aba seus boletos serão perdidos.</p>
+        
+        <p>Preencha os campos abaixo, crie um boleto e depois clique em Gerar Boletos. Os boletos são armazenados localmente em sessionStorage do seu navegador. Se fechar esta aba seus boletos serão perdidos. Os dados colocados ou gerados neste site não serão salvos em nenhum servidor, este é apenas um ambiente de testes. Você pode visitar o repositório do projeto (<a href="https://github.com/resendegu/gerador-boleto-pix-guias">https://github.com/resendegu/gerador-boleto-pix-guias</a>) e usar gratuitamente o código para implementar o gerador de boletos em seu próprio projeto. Esta aplicação não possui nenhuma integração bancária e a geração de boletos não incide em nenhum compromisso financeiro.</p>
       </div>
       
       <Box sx={{ flexGrow: 1 }}>
